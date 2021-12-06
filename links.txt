@@ -1,0 +1,4 @@
+https://predictabledesigns.com/the-sim800-cellular-module-and-arduino-a-powerful-iot-combo/
+https://lastminuteengineers.com/sim800l-gsm-module-arduino-tutorial/
+https://gist.github.com/prehensile/6fe4e5196b5787db52dd7d5df714097d
+https://youtu.be/sZxCpPYpkyY
