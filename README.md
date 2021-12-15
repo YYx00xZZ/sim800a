@@ -99,4 +99,68 @@ AT+CREG? Проверява дали сте регистрирани в мреж
 
 ![niskovoltovo-rele-modul](https://user-images.githubusercontent.com/47386361/146189513-ca78a609-9cf1-436e-932c-abe0b637f3af.jpg)
 
+## 1. AT test commands from Arduino
+За начало ще изпълним тестовите АТ команди, които коментирахме по-горе, но ще ги изпратим от Ардуино към модула. Освен, че ще изпратим командите искаме и да прочетем отговора на модула, които да се изпише в серийния монитор на _Arduino IDE_.
+### Стъпка 1
+Качваме следния код на _Arduino UNO_.
+```C++
+#include <SoftwareSerial.h>
 
+//Create software serial object to communicate with SIM800A
+SoftwareSerial mySerial(3, 2); //SIM800A Tx & Rx is connected to Arduino #3 & #2
+
+void setup()
+{
+  //Begin serial communication with Arduino and Arduino IDE (Serial Monitor)
+  Serial.begin(9600);
+
+  //Begin serial communication with Arduino and SIM800L
+  mySerial.begin(9600);
+
+  Serial.println("Initializing...");
+  delay(1000);
+
+  mySerial.println("AT"); //Once the handshake test is successful, it will back to OK
+  updateSerial();
+  mySerial.println("AT+CSQ"); //Signal quality test, value range is 0-31 , 31 is the best
+  updateSerial();
+  mySerial.println("AT+CCID"); //Read SIM information to confirm whether the SIM is plugged
+  updateSerial();
+  mySerial.println("AT+CREG?"); //Check whether it has registered in the network
+  updateSerial();
+}
+
+void loop()
+{
+  updateSerial();
+}
+
+void updateSerial()
+{
+  delay(500);
+  while (Serial.available())
+  {
+    mySerial.write(Serial.read());//Forward what Serial received to Software Serial Port
+  }
+  while (mySerial.available())
+  {
+    Serial.write(mySerial.read());//Forward what Software Serial received to Serial Port
+  }
+}
+```
+
+!!! Серийният монитор трябва да бъде настроен по следния начин: край на реда **Both NL & CR, 9600 Baudrate**
+
+Към момента можете да пуснете сериен монитор, но това което ще видите е просто ред който гласи `Initializing . . . ` и нищо повече. Трябва да свържем контролера към модула и релето.
+
+## Стъпка 2 
+Дали можем да захранваме модула от ардуиното е спорен въпрос, който се обсъжда из форумите в интернет от години и няма ясен отговор. Според документацията на компонентите - НЕ! Според практиката - да ..
+Това което ще направим ние е да свържем модула директно към контролера, при мен няма никакви проблеми ползвайки го по този начин, постъпете по ваше усмотрение. Другият вариянт (който е и по-добрия, в случай, че имате възможност - направете го) е да осигурим отделно захранване за GSM модула и контролера.
+Следва ASCII диаграма на свързването между отделните компоненти. _GSM модул към Arduino UNO._
+
+![ASCII-GSM-Arduino_Annotation_2021-12-15](https://user-images.githubusercontent.com/47386361/146201878-264e6208-15bf-4fde-a310-87577e4f3f24.jpg)
+
+!!! Преди да започнете да свързвате каквото и да е, моля изключете всичко от захранването. Пазете си компонентите! Въпреки, че цената им е сравнително ниска, няма нужда да разхищаваме ресурси.
+След като свържем GSM модула към Aduino UNO и захраним установката, наблюдаваме следния резултат в серийния монитор (това е успешен резултат):
+
+![ArduinoIDE-SerialMonitor-OUTPUT-v1_Annotation_2021-12-15](https://user-images.githubusercontent.com/47386361/146197952-5c91d80a-91ee-441d-86f0-23d123acf628.jpg)
