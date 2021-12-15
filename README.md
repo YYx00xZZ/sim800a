@@ -114,7 +114,7 @@ void setup()
   //Begin serial communication with Arduino and Arduino IDE (Serial Monitor)
   Serial.begin(9600);
 
-  //Begin serial communication with Arduino and SIM800L
+  //Begin serial communication with Arduino and SIM800А
   mySerial.begin(9600);
 
   Serial.println("Initializing...");
@@ -164,3 +164,10 @@ void updateSerial()
 След като свържем GSM модула към Aduino UNO и захраним установката, наблюдаваме следния резултат в серийния монитор (това е успешен резултат):
 
 ![ArduinoIDE-SerialMonitor-OUTPUT-v1_Annotation_2021-12-15](https://user-images.githubusercontent.com/47386361/146197952-5c91d80a-91ee-441d-86f0-23d123acf628.jpg)
+
+
+## Стъпка 3
+Добавяме Реле модула към установката
+
+диаграма на свързването
+![ArdunoGSM-Relay_Annotation_2021-12-15](https://user-images.githubusercontent.com/47386361/146207437-34cc843c-dfa7-453d-8568-f5d75a0d831e.jpg)
