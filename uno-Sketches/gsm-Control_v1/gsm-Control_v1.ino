@@ -8,7 +8,7 @@ void setup()
   //Begin serial communication with Arduino and Arduino IDE (Serial Monitor)
   Serial.begin(9600);
 
-  //Begin serial communication with Arduino and SIM800L
+  //Begin serial communication with Arduino and SIM800А
   mySerial.begin(9600);
 
   Serial.println("Initializing...");
